@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Snoonu Menu Proof Dashboard</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;700&display=swap");
+
+      :root {
+        --bg: #0e1214;
+        --bg-2: #1b1f22;
+        --card: #14191c;
+        --ink: #f4f1ec;
+        --muted: #a7b0b7;
+        --accent: #f4b860;
+        --accent-2: #3bd4a4;
+        --danger: #ff6b6b;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(1200px 800px at 15% 10%, #233238 0%, transparent 60%),
+          radial-gradient(900px 700px at 80% 20%, #2f2a1f 0%, transparent 55%),
+          linear-gradient(160deg, var(--bg), #0b0e10 55%, #0e1417);
+        min-height: 100vh;
+        padding: 32px 20px 80px;
+      }
+
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px 28px;
+        margin-bottom: 28px;
+      }
+
+      .title {
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: clamp(28px, 4vw, 44px);
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+
+      .sub {
+        color: var(--muted);
+        margin: 0;
+        max-width: 560px;
+      }
+
+      .pill {
+        background: linear-gradient(90deg, rgba(244, 184, 96, 0.2), rgba(59, 212, 164, 0.2));
+        border: 1px solid rgba(244, 184, 96, 0.4);
+        color: var(--accent);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        letter-spacing: 0.3px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1.8fr;
+        gap: 24px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        background: var(--card);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .panel:before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(244, 184, 96, 0.18), transparent 70%);
+        top: -120px;
+        right: -140px;
+        pointer-events: none;
+      }
+
+      .panel h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 260px;
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #0f1417;
+        color: var(--ink);
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        font-size: 14px;
+        resize: vertical;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-top: 12px;
+      }
+
+      .btn {
+        background: var(--accent);
+        color: #1c1204;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(244, 184, 96, 0.25);
+      }
+
+      .btn.secondary {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .btn.ghost {
+        background: rgba(59, 212, 164, 0.1);
+        color: var(--accent-2);
+        border: 1px solid rgba(59, 212, 164, 0.4);
+      }
+
+      .btn.danger {
+        background: rgba(255, 107, 107, 0.12);
+        color: var(--danger);
+        border: 1px solid rgba(255, 107, 107, 0.4);
+      }
+
+      .btn.mic {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--ink);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .btn.mic.active {
+        border-color: rgba(59, 212, 164, 0.6);
+        color: var(--accent-2);
+        box-shadow: 0 0 0 2px rgba(59, 212, 164, 0.15);
+      }
+
+      .file-input,
+      select,
+      .small-input {
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: #0e1316;
+        color: var(--ink);
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .small-input {
+        width: 110px;
+      }
+
+      .status {
+        font-size: 13px;
+        color: var(--accent-2);
+        margin: 8px 0 0;
+      }
+
+      .voice-status {
+        font-size: 12px;
+        color: var(--muted);
+        margin-left: auto;
+      }
+
+      .agent-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .agent-status {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .mic-meter {
+        width: 140px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .mic-level {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent-2), var(--accent));
+        transition: width 120ms ease;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .form {
+        display: grid;
+        gap: 14px;
+      }
+
+      .item {
+        display: grid;
+        grid-template-columns: 1.1fr 1.1fr 1.4fr 1.4fr 0.6fr auto;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: #12181b;
+        animation: liftIn 300ms ease both;
+      }
+
+      .item:nth-child(odd) {
+        background: #101517;
+      }
+
+      @media (max-width: 900px) {
+        .item {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .item input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #0e1316;
+        color: var(--ink);
+        font-size: 14px;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .counter {
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .approve {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: #0b0f0d;
+      }
+
+      @keyframes liftIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <span class="pill">Proof of Concept</span>
+        <div>
+          <h1 class="title">Menu Extraction Dashboard</h1>
+          <p class="sub">
+            Paste the JSON response from Datalab, review the items, and approve
+            the final list before data entry.
+          </p>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="panel">
+          <h2>Input JSON</h2>
+          <textarea id="jsonInput" placeholder='{"items":[{"name_ar":"...", "name_en":"...", "price":12.5}]}'></textarea>
+          <div class="row">
+            <button class="btn" id="loadJson">Load JSON</button>
+            <button class="btn secondary" id="loadSample">Load sample</button>
+            <input class="file-input" type="file" id="fileInput" accept=".json" />
+          </div>
+          <p class="hint">The form will populate from `items[]` in the JSON.</p>
+          <hr style="border-color: rgba(255, 255, 255, 0.06); margin: 18px 0;" />
+          <h2>Extract from File</h2>
+          <div class="row">
+            <input class="file-input" type="file" id="menuFile" accept=".pdf,image/*" />
+            <select id="modeSelect">
+              <option value="fast">fast</option>
+              <option value="balanced" selected>balanced</option>
+              <option value="accurate">accurate</option>
+            </select>
+            <input class="small-input" type="number" id="maxPages" placeholder="max pages" min="1" />
+            <button class="btn" id="runExtract">Run extraction</button>
+          </div>
+          <p class="status" id="extractStatus"></p>
+        </div>
+
+        <div class="panel">
+          <div class="toolbar">
+            <h2>Review Items</h2>
+            <span class="counter" id="itemCount">0 items</span>
+          </div>
+          <div class="row" style="margin-bottom: 12px;">
+            <button class="btn ghost" id="addRow">Add item</button>
+            <button class="btn approve" id="approve">Approve &amp; Export JSON</button>
+            <button class="btn secondary" id="exportCsv">Export CSV</button>
+            <span class="voice-status" id="voiceStatus">Voice idle</span>
+          </div>
+          <div class="agent-controls" style="margin-bottom: 10px;">
+            <input class="small-input" id="roomName" placeholder="room name" />
+            <button class="btn secondary" id="connectAgent">Connect agent</button>
+            <button class="btn secondary" id="disconnectAgent">Disconnect</button>
+            <button class="btn secondary" id="enableMic">Enable mic</button>
+            <div class="mic-meter" aria-hidden="true">
+              <div class="mic-level" id="micLevel"></div>
+            </div>
+            <span class="agent-status" id="agentStatus">Agent disconnected</span>
+          </div>
+          <div class="form" id="itemsForm"></div>
+        </div>
+      </section>
+    </div>
+
+    <audio id="agentAudio" autoplay></audio>
+
+    <script src="/livekit-client.umd.js"></script>
+    <script>
+      if (!window.LiveKit && window.LivekitClient) {
+        window.LiveKit = window.LivekitClient;
+      }
+    </script>
+    <script>
+      const jsonInput = document.getElementById("jsonInput");
+      const itemsForm = document.getElementById("itemsForm");
+      const itemCount = document.getElementById("itemCount");
+      const menuFile = document.getElementById("menuFile");
+      const modeSelect = document.getElementById("modeSelect");
+      const maxPages = document.getElementById("maxPages");
+      const extractStatus = document.getElementById("extractStatus");
+      const voiceStatus = document.getElementById("voiceStatus");
+      const roomNameInput = document.getElementById("roomName");
+      const connectAgentBtn = document.getElementById("connectAgent");
+      const disconnectAgentBtn = document.getElementById("disconnectAgent");
+      const enableMicBtn = document.getElementById("enableMic");
+      const agentStatus = document.getElementById("agentStatus");
+      const agentAudio = document.getElementById("agentAudio");
+      const micLevel = document.getElementById("micLevel");
+
+      function updateCount() {
+        const count = itemsForm.querySelectorAll(".item").length;
+        itemCount.textContent = `${count} item${count === 1 ? "" : "s"}`;
+      }
+
+      function buildItemRow(item = {}) {
+        const row = document.createElement("div");
+        row.className = "item";
+
+        const nameAr = document.createElement("input");
+        nameAr.placeholder = "Arabic name";
+        nameAr.value = item.name_ar ?? "";
+
+        const nameEn = document.createElement("input");
+        nameEn.placeholder = "English name";
+        nameEn.value = item.name_en ?? "";
+
+        const descAr = document.createElement("input");
+        descAr.placeholder = "Arabic description";
+        descAr.value = item.description_ar ?? "";
+
+        const descEn = document.createElement("input");
+        descEn.placeholder = "English description";
+        descEn.value = item.description_en ?? "";
+
+        const price = document.createElement("input");
+        price.placeholder = "Price";
+        price.type = "number";
+        price.step = "0.01";
+        price.value = item.price ?? "";
+
+        const remove = document.createElement("button");
+        remove.className = "btn danger";
+        remove.type = "button";
+        remove.textContent = "Remove";
+        remove.addEventListener("click", () => {
+          row.remove();
+          updateCount();
+        });
+
+        row.appendChild(nameAr);
+        row.appendChild(nameEn);
+        row.appendChild(descAr);
+        row.appendChild(descEn);
+        row.appendChild(price);
+        row.appendChild(remove);
+        return row;
+      }
+
+      function renderItems(items) {
+        itemsForm.innerHTML = "";
+        items.forEach((item) => itemsForm.appendChild(buildItemRow(item)));
+        updateCount();
+        scheduleMenuContextSync();
+      }
+
+      function getRows() {
+        return Array.from(itemsForm.querySelectorAll(".item"));
+      }
+
+      function normalizeText(text) {
+        return (text || "")
+          .toString()
+          .toLowerCase()
+          .replace(/[^\u0600-\u06ff\w\s]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function scoreMatch(haystack, tokens) {
+        if (!haystack || tokens.length === 0) return 0;
+        let score = 0;
+        tokens.forEach((token) => {
+          if (haystack.includes(token)) score += 1;
+        });
+        return score;
+      }
+
+      function findRowByText(text) {
+        const tokens = normalizeText(text)
+          .split(" ")
+          .filter((t) => t && t.length > 1);
+        if (!tokens.length) return null;
+        let best = { row: null, score: 0 };
+        getRows().forEach((row) => {
+          const inputs = row.querySelectorAll("input");
+          const nameAr = normalizeText(inputs[0].value);
+          const nameEn = normalizeText(inputs[1].value);
+          const score = Math.max(scoreMatch(nameAr, tokens), scoreMatch(nameEn, tokens));
+          if (score > best.score) best = { row, score };
+        });
+        return best.score > 0 ? best.row : null;
+      }
+
+      function applyEditInstruction(instruction) {
+        if (!instruction || typeof instruction !== "object") {
+          return "Invalid instruction.";
+        }
+
+        if (instruction.action === "noop") {
+          return instruction.reason || "No changes applied.";
+        }
+
+        if (instruction.action === "add") {
+          itemsForm.appendChild(buildItemRow(instruction.fields || {}));
+          updateCount();
+          scheduleMenuContextSync();
+          return "Added a new item.";
+        }
+
+        const match = instruction.match || {};
+        const matchText = match.name_ar || match.name_en || "";
+        const row = matchText ? findRowByText(matchText) : null;
+
+        if (!row) {
+          return "Could not find a matching item name.";
+        }
+
+        if (instruction.action === "delete") {
+          row.remove();
+          updateCount();
+          scheduleMenuContextSync();
+          return "Item removed.";
+        }
+
+        if (instruction.action === "update") {
+          const inputs = row.querySelectorAll("input");
+          const fields = instruction.fields || {};
+          if (fields.name_ar !== undefined) inputs[0].value = fields.name_ar ?? "";
+          if (fields.name_en !== undefined) inputs[1].value = fields.name_en ?? "";
+          if (fields.description_ar !== undefined) inputs[2].value = fields.description_ar ?? "";
+          if (fields.description_en !== undefined) inputs[3].value = fields.description_en ?? "";
+          if (fields.price !== undefined && fields.price !== null) inputs[4].value = fields.price;
+          scheduleMenuContextSync();
+          return "Item updated.";
+        }
+
+        return "Unknown action.";
+      }
+
+      async function sendVoiceCommand(transcript) {
+        const items = Array.from(itemsForm.querySelectorAll(".item")).map((row) => {
+          const inputs = row.querySelectorAll("input");
+          return {
+            name_ar: inputs[0].value || "",
+            name_en: inputs[1].value || "",
+          };
+        });
+        const response = await fetch("/api/voice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ transcript, items }),
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Voice command failed.");
+        }
+        return payload;
+      }
+
+      function setAgentStatus(message, isError = false) {
+        agentStatus.textContent = message;
+        agentStatus.style.color = isError ? "var(--danger)" : "var(--muted)";
+      }
+
+      function parseJsonInput() {
+        const raw = jsonInput.value.trim();
+        if (!raw) {
+          alert("Paste JSON first.");
+          return;
+        }
+        try {
+          const data = JSON.parse(raw);
+          const items = Array.isArray(data.items) ? data.items : [];
+          renderItems(items);
+        } catch (err) {
+          alert("Invalid JSON.");
+        }
+      }
+
+      function exportJson() {
+        const items = Array.from(itemsForm.querySelectorAll(".item")).map((row) => {
+          const inputs = row.querySelectorAll("input");
+          return {
+            name_ar: inputs[0].value || null,
+            name_en: inputs[1].value || null,
+            description_ar: inputs[2].value || null,
+            description_en: inputs[3].value || null,
+            price: inputs[4].value ? Number(inputs[4].value) : null,
+          };
+        });
+        const payload = { items };
+        jsonInput.value = JSON.stringify(payload, null, 2);
+        jsonInput.scrollIntoView({ behavior: "smooth", block: "start" });
+        scheduleMenuContextSync();
+      }
+
+      function exportCsv() {
+        const rows = [["name_ar", "name_en", "description_ar", "description_en", "price"]];
+        Array.from(itemsForm.querySelectorAll(".item")).forEach((row) => {
+          const inputs = row.querySelectorAll("input");
+          rows.push([
+            inputs[0].value || "",
+            inputs[1].value || "",
+            inputs[2].value || "",
+            inputs[3].value || "",
+            inputs[4].value || "",
+          ]);
+        });
+        const csvBody = rows
+          .map((cols) =>
+            cols
+              .map((value) => `"${String(value).replaceAll('"', '""')}"`)
+              .join(",")
+          )
+          .join("\r\n");
+        const csv = `\uFEFF${csvBody}`;
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "menu_items.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function setStatus(message, isError = false) {
+        extractStatus.textContent = message;
+        extractStatus.style.color = isError ? "var(--danger)" : "var(--accent-2)";
+      }
+
+      async function runExtraction() {
+        const file = menuFile.files[0];
+        if (!file) {
+          alert("Choose a PDF or image file.");
+          return;
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("mode", modeSelect.value);
+        if (maxPages.value) {
+          formData.append("max_pages", maxPages.value);
+        }
+        setStatus("Extracting...");
+        try {
+          const response = await fetch("/api/extract", {
+            method: "POST",
+            body: formData,
+          });
+          const payload = await response.json();
+          if (!response.ok) {
+            throw new Error(payload.error || "Extraction failed.");
+          }
+          jsonInput.value = JSON.stringify(payload, null, 2);
+          renderItems(Array.isArray(payload.items) ? payload.items : []);
+          setStatus("Extraction complete.");
+        } catch (err) {
+          setStatus(err.message || "Extraction failed.", true);
+        }
+      }
+
+      document.getElementById("loadJson").addEventListener("click", parseJsonInput);
+      document.getElementById("loadSample").addEventListener("click", () => {
+        jsonInput.value = JSON.stringify(
+          {
+            items: [
+              {
+                name_ar: "كباب مشوي",
+                name_en: "Kabab Platter",
+                description_ar: "طبق كباب مشوي مع أرز وسلطة.",
+                description_en: "Grilled kabab platter with rice and salad.",
+                price: 49,
+              },
+              {
+                name_ar: "دجاج هاندي",
+                name_en: "Chicken Handi",
+                description_ar: "دجاج مطهو بصلصة كريمية وتوابل.",
+                description_en: "Chicken cooked in a creamy spiced sauce.",
+                price: 46,
+              },
+            ],
+          },
+          null,
+          2
+        );
+        parseJsonInput();
+      });
+      document.getElementById("addRow").addEventListener("click", () => {
+        itemsForm.appendChild(buildItemRow({}));
+        updateCount();
+        scheduleMenuContextSync();
+      });
+      document.getElementById("approve").addEventListener("click", exportJson);
+      document.getElementById("exportCsv").addEventListener("click", exportCsv);
+      document.getElementById("runExtract").addEventListener("click", runExtraction);
+
+      let livekitRoom;
+      let micEnabled = false;
+      let audioContext;
+      let analyser;
+      let micStream;
+      let micAnimation;
+      let menuContextTimer;
+      function getMenuSnapshot() {
+        return Array.from(itemsForm.querySelectorAll(".item")).map((row) => {
+          const inputs = row.querySelectorAll("input");
+          return {
+            name_ar: inputs[0].value || null,
+            name_en: inputs[1].value || null,
+            description_ar: inputs[2].value || null,
+            description_en: inputs[3].value || null,
+            price: inputs[4].value ? Number(inputs[4].value) : null,
+          };
+        });
+      }
+
+      function scheduleMenuContextSync() {
+        if (!livekitRoom || !livekitRoom.localParticipant) return;
+        if (menuContextTimer) {
+          clearTimeout(menuContextTimer);
+        }
+        menuContextTimer = setTimeout(() => {
+          sendMenuContext();
+        }, 300);
+      }
+
+      async function sendMenuContext() {
+        if (!livekitRoom || !livekitRoom.localParticipant) return;
+        const payload = { items: getMenuSnapshot() };
+        const encoded = new TextEncoder().encode(JSON.stringify(payload));
+        try {
+          await livekitRoom.localParticipant.publishData(encoded, { reliable: true, topic: "menu-context" });
+          console.log("menu-context sent", payload.items.length);
+        } catch (err) {
+          console.error("menu-context send failed", err);
+        }
+        try {
+          await livekitRoom.localParticipant.setMetadata(JSON.stringify(payload));
+          console.log("menu-context metadata set", payload.items.length);
+        } catch (err) {
+          console.error("menu-context metadata failed", err);
+        }
+      }
+      async function getLivekitToken(roomName, identity) {
+        const response = await fetch("/api/livekit-token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            room: roomName,
+            identity,
+            dispatch: true,
+          }),
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Token request failed.");
+        }
+        return payload;
+      }
+
+      function ensureRoomName() {
+        if (!roomNameInput.value.trim()) {
+          const roomId = Math.random().toString(36).slice(2, 8);
+          roomNameInput.value = `menu-room-${roomId}`;
+        }
+        return roomNameInput.value.trim();
+      }
+
+      function getLiveKitClient() {
+        return window.LiveKit || window.LiveKitClient || window.LivekitClient || null;
+      }
+
+      async function connectAgent() {
+        const LiveKitClient = getLiveKitClient();
+        if (!LiveKitClient) {
+          setAgentStatus("LiveKit client not loaded", true);
+          return;
+        }
+        const roomName = ensureRoomName();
+        const identity = `dashboard-${Math.random().toString(36).slice(2, 8)}`;
+        setAgentStatus("Connecting...");
+        try {
+          const { token, url, livekit_url } = await getLivekitToken(roomName, identity);
+          const wsUrl = livekit_url || url;
+          livekitRoom = new LiveKitClient.Room({ adaptiveStream: true, dynacast: true });
+          livekitRoom.prepareConnection(wsUrl, token);
+          livekitRoom.on(LiveKitClient.RoomEvent.TrackSubscribed, (track) => {
+            if (track.kind === "audio") {
+              track.attach(agentAudio);
+              agentAudio.play().catch(() => {});
+            }
+          });
+          livekitRoom.on(LiveKitClient.RoomEvent.DataReceived, (payload, participant, kind, topic) => {
+            if (topic !== "menu-edit") return;
+            try {
+              const text = new TextDecoder().decode(payload);
+              const instruction = JSON.parse(text);
+              const result = applyEditInstruction(instruction);
+              voiceStatus.textContent = result;
+            } catch (err) {
+              voiceStatus.textContent = "Failed to apply agent edit.";
+            }
+          });
+          livekitRoom.on(LiveKitClient.RoomEvent.Disconnected, () => {
+            setAgentStatus("Agent disconnected");
+            micEnabled = false;
+          });
+          await livekitRoom.connect(wsUrl, token);
+          setAgentStatus(`Connected to ${roomName}`);
+          await sendMenuContext();
+        } catch (err) {
+          setAgentStatus(err.message || "Failed to connect", true);
+        }
+      }
+
+      async function disconnectAgent() {
+        if (livekitRoom) {
+          await livekitRoom.disconnect();
+          livekitRoom = null;
+          setAgentStatus("Agent disconnected");
+          stopMicMeter();
+        }
+      }
+
+      async function enableMic() {
+        if (!livekitRoom) {
+          setAgentStatus("Connect agent first", true);
+          return;
+        }
+        try {
+          if (typeof livekitRoom.localParticipant.setMicrophoneEnabled === "function") {
+            await livekitRoom.localParticipant.setMicrophoneEnabled(true);
+          } else if (typeof livekitRoom.localParticipant.enableMicrophone === "function") {
+            await livekitRoom.localParticipant.enableMicrophone();
+          } else if (window.LiveKit || window.LivekitClient || window.LiveKitClient) {
+            const LiveKitClient = getLiveKitClient();
+            const track = await LiveKitClient.createLocalAudioTrack();
+            await livekitRoom.localParticipant.publishTrack(track);
+          } else {
+            throw new Error("Microphone API not available");
+          }
+          micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 512;
+          const source = audioContext.createMediaStreamSource(micStream);
+          source.connect(analyser);
+          const data = new Uint8Array(analyser.frequencyBinCount);
+          const updateMeter = () => {
+            if (!analyser) return;
+            analyser.getByteFrequencyData(data);
+            let sum = 0;
+            for (let i = 0; i < data.length; i++) sum += data[i];
+            const avg = sum / data.length;
+            const pct = Math.min(100, Math.max(4, (avg / 255) * 100));
+            micLevel.style.width = `${pct}%`;
+            micAnimation = requestAnimationFrame(updateMeter);
+          };
+          updateMeter();
+          micEnabled = true;
+          setAgentStatus("Mic enabled");
+        } catch (err) {
+          setAgentStatus(err.message || "Mic permission denied", true);
+        }
+      }
+
+      function stopMicMeter() {
+        if (micAnimation) {
+          cancelAnimationFrame(micAnimation);
+          micAnimation = null;
+        }
+        if (micStream) {
+          micStream.getTracks().forEach((track) => track.stop());
+          micStream = null;
+        }
+        if (audioContext) {
+          audioContext.close();
+          audioContext = null;
+        }
+        analyser = null;
+        micLevel.style.width = "0%";
+      }
+
+      connectAgentBtn.addEventListener("click", connectAgent);
+      disconnectAgentBtn.addEventListener("click", disconnectAgent);
+      enableMicBtn.addEventListener("click", enableMic);
+      itemsForm.addEventListener("input", scheduleMenuContextSync);
+
+      ensureRoomName();
+      if (getLiveKitClient()) {
+        setAgentStatus("LiveKit ready");
+      }
+
+      if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+        voiceStatus.textContent = "Voice ready";
+      } else {
+        voiceStatus.textContent = "Voice not supported";
+      }
+
+      document.getElementById("fileInput").addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const text = await file.text();
+        jsonInput.value = text;
+        parseJsonInput();
+      });
+    </script>
+  </body>
+</html>
